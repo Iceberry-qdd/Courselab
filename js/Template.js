@@ -7,27 +7,13 @@
  */
 
 /**
- * 不同语言和框架对应的颜色对照
- */
-const langColor = {
-    "java": "#ff7f50",
-    "javaweb": "#ff7f50",
-    "python": "#3572a5",
-    "cpp": "#f34b7d",
-    "spring": "#41b883",
-    "c": "#000000",
-    "javascript": "#f1e05a",
-    "undefine":"#eeeeee"
-}
-
-/**
  * 生成单个课程卡片内容
  * @param {string} lang 课程所属语言类型
  * @param {Course} course 课程对象
  * @returns html字符串
  */
 function injectCourse(lang, course) {
-    return `<div class="Card ${lang.toLowerCase()}" >
+    return `<div class="Card ${lang}" >
                 <div class="Card-title">${course.title}</div>
                 <div class="Card-extra">
                     <div class="Card-extra-author">@${course.author}</div>
@@ -37,7 +23,7 @@ function injectCourse(lang, course) {
                     <div class="Card-content-icon">
                         <img class="icon" src="${course.iconUrl}" />
                     </div>
-                    <button class="Card-content-btn ${lang.toLowerCase()} ${course.btnStatus?'allow':'not-allow'}">
+                    <button class="Card-content-btn ${lang} ${course.btnStatus?'allow':'not-allow'}">
                         <a class="Card-content-btn-link" href="${course.btnStatus?course.url:'javascript:;'}">
                             ${course.btnStatus?'启动':'未完成'}
                         </a>
@@ -55,7 +41,7 @@ function injectCourse(lang, course) {
 function injectCoursesOfOneLang(lang, data) {
     let allCourses = ""
     for (const key of data) {
-        allCourses += injectCourse(lang, key)
+        allCourses += injectCourse(lang.toLowerCase(), key)
     }
     return `<div id="${lang}">
                 <div class="Sort-title ${lang.toLowerCase()}">${lang}</div>
@@ -83,20 +69,20 @@ function injectCourseListOfAllLang(data) {
  * @param {string} lang 语言类型
  * @returns 生成的课程卡片css
  */
-function injectCourseCss(lang){
-    return `.${lang.toLowerCase()}{
-        border-left-color: ${langColor[lang.toLowerCase()]};
+function injectCourseCss(lang,langColor){
+    return `.${lang}{
+        border-left-color: ${langColor};
     }
     
-    .Card.${lang.toLowerCase()}:hover{
-        box-shadow: 0px 0px 4px 4px ${langColor[lang.toLowerCase()]}33;
+    .Card.${lang}:hover{
+        box-shadow: 0px 0px 4px 4px ${langColor}33;
     }
-    .Card-content-btn.${lang.toLowerCase()}.allow {
-        background-color: ${langColor[lang.toLowerCase()]};
+    .Card-content-btn.${lang}.allow {
+        background-color: ${langColor};
         cursor: pointer;
     }
 
-    .Card-content-btn.${lang.toLowerCase()}.not-allow {
+    .Card-content-btn.${lang}.not-allow {
         background-color: grey;
     }`
 }
@@ -104,12 +90,13 @@ function injectCourseCss(lang){
 /**
  * 根据外部数据生成课程卡片css
  * @param {Array<string>} langs 外部获取到的数据的所有语言类型数组
+ * @param {Map<string>} langsColor 外部获取到的所有语言的颜色类型
  * @returns 最终生成的课程卡片css
  */
-function injectCoursesCss(langs){
+function injectCoursesCss(langs,langsColor){
     let css=""
     for (const lang of langs) {
-        css+=injectCourseCss(lang)
+        css+=injectCourseCss(lang.toLowerCase(),langsColor[lang.toLowerCase()])
     }
     return css
 

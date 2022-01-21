@@ -1,5 +1,3 @@
-/* @import url(/css/langStyle.css); */
-
 body {
     margin: 0;
 }
@@ -11,7 +9,7 @@ body {
 }
 
 .Header {
-    z-index: 1000;
+    z-index: 1;
     height: 4rem;
     width: 100%;
     background-color: black;

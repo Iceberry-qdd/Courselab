@@ -16,10 +16,17 @@ window.onload = function () {
     printLogo()
     adjustIndexSize()
 
-    api.getCourseData(function onSuccess(status,data) {
+    api.getCourseData(function onSuccess(status, data) {
         const courseList = JSON.parse(data)
-        injectCourseContent(courseList)
-        injectCoursesStyle(injectCoursesCss(Object.keys(courseList)))
+        api.getCourseColor(function onSuccess(status, data) {
+            const courseColor = JSON.parse(data)
+            injectCourseContent(courseList)
+            injectCoursesStyle(injectCoursesCss(Object.keys(courseList), courseColor))
+        }, function onError(status, msg) {
+            //TODO 错误处理
+            console.log(`[onError]status:${status},msg:${msg}`)
+        })
+
     }, function onError(status, msg) {
         //TODO 错误处理
         console.log(`[onError]status:${status},msg:${msg}`)
